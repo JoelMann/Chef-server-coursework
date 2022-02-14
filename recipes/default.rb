@@ -1,7 +1,7 @@
 #
 # Cookbook:: myhaproxy
 # Recipe:: default
-#
+# NEW
 # Copyright:: 2022, The Authors, All Rights Reserved.
 apt_update
 
@@ -13,12 +13,14 @@ haproxy_frontend 'http-in' do
 end
 
 haproxy_backend 'servers' do
-  server ['web1 192.168.10.43:80 maxconn 32']
+  server ['web1 192.168.10.43:80 maxconn 32',
+        'web2 192.168.10.44:80'
+]
 #   notifies :reload, "haproxy_service[haproxy]", :immediately 
 # doing this for a future test  - github issue -> check on a future version. 
 end
 
 haproxy_service 'haproxy' do
   action %i(create enable start)
-  subscribes :reload 'template[/etc/haproxy/haproxy.cfg]', :immediately
+  subscribes :reload, "template[/etc/haproxy/haproxy.cfg]", :immediately
 end
