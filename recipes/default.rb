@@ -12,12 +12,12 @@ haproxy_frontend 'http-in' do
   default_backend 'servers'
 end
 
-all_web_nodes = search('node', 'web3')
+all_web_nodes = search(:node, 'role:web')
 
 servers = []
 
 all_web_nodes.each do |web_node|
-  server = "#{wed_node['hostname']} #{wed_node['ipaddress']}:80 maxconn 32"
+  server = "#{web_node['hostname']} #{web_node['ipaddress']}:80 maxconn 32"
   servers.push(server)
 end
 
