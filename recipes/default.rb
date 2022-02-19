@@ -12,10 +12,17 @@ haproxy_frontend 'http-in' do
   default_backend 'servers'
 end
 
+all_web_nodes = search('node', 'web3')
+
+servers = []
+
+all_web_nodes.each do |web_node|
+  server = "#{wed_node['hostname']} #{wed_node['ipaddress']}:80 maxconn 32"
+  servers.push(server)
+end
+
 haproxy_backend 'servers' do
-  server ['web1 192.168.10.43:80 maxconn 32',
-        'web2 192.168.10.44:80'
-]
+  server servers
 #   notifies :reload, "haproxy_service[haproxy]", :immediately 
 # doing this for a future test  - github issue -> check on a future version. 
 end
